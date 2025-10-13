@@ -1,7 +1,13 @@
 import { getFabric, FabricNS } from "@/lib/fabric-loader"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
+import { useAutoResize } from "./use-auto-resize"
 
 export const useEditor = () => {
+  const [container, setContainer] = useState<HTMLDivElement | null>(null)
+  const [canvas, setCanvas] = useState<FabricNS.Canvas | null>(null)
+
+  useAutoResize({ containerDom: container, fabricCanvas: canvas })
+
   const init = useCallback(
     ({
       containerDom,
@@ -27,6 +33,9 @@ export const useEditor = () => {
       fabricCanvas.add(workspace)
       fabricCanvas.centerObject(workspace)
       fabricCanvas.clipPath = workspace
+
+      setCanvas(fabricCanvas)
+      setContainer(containerDom)
 
       const testBlock = new fabric.Rect({
         height: 100,
