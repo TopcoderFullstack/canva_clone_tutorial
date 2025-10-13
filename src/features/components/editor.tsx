@@ -18,7 +18,8 @@ export const Editor = () => {
     return () => {
       canvas.dispose()
     }
-  })
+  }, [init])
+
   return (
     <div ref={containerRef} className="h-full flex">
       <canvas ref={canvasRef}></canvas>
