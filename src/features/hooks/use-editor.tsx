@@ -5,8 +5,9 @@ import { useAutoResize } from "./use-auto-resize"
 export const useEditor = () => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null)
   const [canvas, setCanvas] = useState<FabricNS.Canvas | null>(null)
+  const [workspace, setWorkspace] = useState<FabricNS.Rect | null>(null)
 
-  useAutoResize({ containerDom: container, fabricCanvas: canvas })
+  useAutoResize({ containerDom: container, fabricCanvas: canvas, workspace })
 
   const init = useCallback(
     ({
@@ -36,6 +37,7 @@ export const useEditor = () => {
 
       setCanvas(fabricCanvas)
       setContainer(containerDom)
+      setWorkspace(workspace)
 
       const testBlock = new fabric.Rect({
         height: 100,
