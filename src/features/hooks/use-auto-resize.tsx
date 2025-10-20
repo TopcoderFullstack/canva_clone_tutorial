@@ -32,10 +32,13 @@ export const useAutoResize = ({
 
     // calculate zoom
     const fabric = getFabric()!
-    const zoomRatio = 0.8
+    const zoomRatio = 1
 
-    //@ts-expect-error -- fabric typings miss util.
-    const scale = fabric.util.findScaleToFit(workspace, { width, height })
+    {
+      //@ts-expect-error -- fabric typings miss util.
+      fabric.util.findScaleToFit(workspace, { width, height })
+    }
+    const scale = Math.min(width / workspace.width!, height / workspace.height!)
     const zoom = zoomRatio * scale
 
     // get worksapce center info
@@ -45,8 +48,8 @@ export const useAutoResize = ({
     const canvasCenterY = height / 2
 
     // calcauate translation
-    const translateX = canvasCenterX - workspaceCenter.x * zoom
-    const translateY = canvasCenterY - workspaceCenter.y * zoom
+    const translateX = (canvasCenterX - workspaceCenter.x * zoom) * 1
+    const translateY = (canvasCenterY - workspaceCenter.y * zoom) * 1
 
     // calcauate transform matrix
     const finalTransform: number[] = [
@@ -59,11 +62,6 @@ export const useAutoResize = ({
     ]
 
     fabricCanvas.setViewportTransform(finalTransform)
-
-    workspace.clone((cloned: fabric.Rect) => {
-      fabricCanvas.clipPath = cloned
-      fabricCanvas.requestRenderAll()
-    })
   }, [fabricCanvas, containerDom])
 
   useEffect(() => {
