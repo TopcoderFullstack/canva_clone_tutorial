@@ -4,12 +4,14 @@ import { useEffect, useCallback } from "react"
 export const useAutoResize = ({
   containerDom,
   fabricCanvas,
+  workspace,
 }: {
   containerDom: HTMLDivElement | null
   fabricCanvas: FabricNS.Canvas | null
+  workspace: FabricNS.Rect | null
 }) => {
   const autoZoom = useCallback(() => {
-    if (!containerDom || !fabricCanvas) {
+    if (!containerDom || !fabricCanvas || !workspace) {
       return
     }
 
@@ -20,15 +22,6 @@ export const useAutoResize = ({
     // set fabric canva width & height
     fabricCanvas.setWidth(width)
     fabricCanvas.setHeight(height)
-
-    // get workspace
-    const workspace = fabricCanvas
-      .getObjects()
-      .find((object) => object.name === "workspace")
-
-    if (!workspace) {
-      return
-    }
 
     // calculate zoom
     const fabric = getFabric()!
@@ -62,7 +55,7 @@ export const useAutoResize = ({
     ]
 
     fabricCanvas.setViewportTransform(finalTransform)
-  }, [fabricCanvas, containerDom])
+  }, [fabricCanvas, containerDom, workspace])
 
   useEffect(() => {
     if (!containerDom || !fabricCanvas) {
