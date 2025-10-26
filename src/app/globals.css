@@ -3,14 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
-  font-size: 10px;
-}
 html,
 body {
   height: 100%;
   background-color: var(--background);
-  font-size: 1.6rem;
 }
 
 @theme inline {
