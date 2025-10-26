@@ -1,4 +1,4 @@
-import { FabricNS, getFabric } from "@/lib/fabric-loader"
+import { FabricNS } from "@/lib/fabric-loader"
 import { useEffect, useCallback } from "react"
 
 export const useAutoResize = ({
@@ -15,22 +15,17 @@ export const useAutoResize = ({
       return
     }
 
-    // get container width & height
-    const width = containerDom.offsetWidth
-    const height = containerDom.offsetHeight
+    // get container width & height without border
+    const width = containerDom.clientWidth
+    const height = containerDom.clientHeight
 
     // set fabric canva width & height
     fabricCanvas.setWidth(width)
     fabricCanvas.setHeight(height)
 
     // calculate zoom
-    const fabric = getFabric()!
-    const zoomRatio = 1
+    const zoomRatio = 0.9
 
-    {
-      //@ts-expect-error -- fabric typings miss util.
-      fabric.util.findScaleToFit(workspace, { width, height })
-    }
     const scale = Math.min(width / workspace.width!, height / workspace.height!)
     const zoom = zoomRatio * scale
 
