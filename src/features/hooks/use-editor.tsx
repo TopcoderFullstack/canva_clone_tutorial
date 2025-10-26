@@ -19,12 +19,12 @@ export const useEditor = () => {
     }) => {
       const fabric = getFabric()!
 
-      fabricCanvas.setWidth(containerDom.offsetWidth)
-      fabricCanvas.setHeight(containerDom.offsetHeight)
+      fabricCanvas.setWidth(containerDom.clientWidth)
+      fabricCanvas.setHeight(containerDom.clientHeight)
 
       const workspace = new fabric.Rect({
-        width: 900,
-        height: containerDom.offsetHeight,
+        width: 600,
+        height: 800,
         name: "workspace",
         fill: "white",
         selectable: false,
