@@ -54,7 +54,7 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.6",
     "embla-carousel-react": "^8.6.0",
-    "fabric": "5.5.2",
+    "fabric": "^5.5.2",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.545.0",
     "next": "15.5.4",
