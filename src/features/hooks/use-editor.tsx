@@ -21,6 +21,10 @@ export const useEditor = () => {
 
       fabricCanvas.setWidth(containerDom.clientWidth)
       fabricCanvas.setHeight(containerDom.clientHeight)
+      const width = containerDom.clientWidth
+      const height = containerDom.clientHeight
+
+      fabricCanvas.setDimensions({ width, height }, { backstoreOnly: true })
 
       const workspace = new fabric.Rect({
         width: 600,
