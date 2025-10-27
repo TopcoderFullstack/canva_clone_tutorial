@@ -1,5 +1,5 @@
 import { FabricNS } from "@/lib/fabric-loader"
-import { useEffect, useCallback } from "react"
+import { useEffect, useCallback, useRef } from "react"
 
 export const useAutoResize = ({
   containerDom,
@@ -10,6 +10,8 @@ export const useAutoResize = ({
   fabricCanvas: FabricNS.Canvas | null
   workspace: FabricNS.Rect | null
 }) => {
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
+
   const autoZoom = useCallback(() => {
     if (!containerDom || !fabricCanvas || !workspace) {
       return
@@ -20,8 +22,7 @@ export const useAutoResize = ({
     const height = containerDom.clientHeight
 
     // set fabric canva width & height
-    fabricCanvas.setWidth(width)
-    fabricCanvas.setHeight(height)
+    fabricCanvas.setDimensions({ width, height })
 
     // calculate zoom
     const zoomRatio = 0.9
@@ -52,16 +53,35 @@ export const useAutoResize = ({
     fabricCanvas.setViewportTransform(finalTransform)
   }, [fabricCanvas, containerDom, workspace])
 
+  const debouncedAutoZoom = useCallback(
+    (delay: number = 50) => {
+      // Clear existing timer
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+
+      // Set new timer with custom delay
+      debounceTimerRef.current = setTimeout(() => {
+        autoZoom()
+      }, delay)
+    },
+    [autoZoom]
+  )
+
   useEffect(() => {
     if (!containerDom || !fabricCanvas) {
       return
     }
     const resizeObserver = new ResizeObserver(() => {
-      autoZoom()
+      debouncedAutoZoom(20)
     })
     resizeObserver.observe(containerDom)
     return () => {
+      // Clean up debounce timer
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
       resizeObserver?.disconnect()
     }
-  }, [containerDom, fabricCanvas, autoZoom])
+  }, [containerDom, fabricCanvas, debouncedAutoZoom])
 }
